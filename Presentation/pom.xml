@@ -49,31 +49,16 @@
 	</dependencyManagement>
 
 	<dependencies>
-		<dependency>
-			<groupId>com.redhat.refarch.microservices</groupId>
-			<artifactId>product</artifactId>
-			<version>1.0</version>
-			<classifier>classes</classifier>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.redhat.refarch.microservices</groupId>
-			<artifactId>sales</artifactId>
-			<version>1.0</version>
-			<classifier>classes</classifier>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.redhat.refarch.microservices</groupId>
-			<artifactId>billing</artifactId>
-			<version>1.0</version>
-			<classifier>classes</classifier>
-			<scope>compile</scope>
-		</dependency>
 
 		<dependency>
 			<groupId>org.jboss.spec.javax.servlet</groupId>
 			<artifactId>jboss-servlet-api_3.1_spec</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.hibernate.javax.persistence</groupId>
+			<artifactId>hibernate-jpa-2.1-api</artifactId>
 			<scope>provided</scope>
 		</dependency>
 

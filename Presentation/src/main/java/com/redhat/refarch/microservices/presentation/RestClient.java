@@ -432,15 +432,15 @@ public class RestClient {
 		WebTarget target;
 		switch (service) {
 		case Product:
-			target = client.target("http://product-service").path("/product");
+			target = client.target("http://product-service:8080").path("/product");
 			break;
 
 		case Sales:
-			target = client.target("http://sales-service").path("/sales");
+			target = client.target("http://sales-service:8080").path("/sales");
 			break;
 
 		case Billing:
-			target = client.target("http://billing-service").path("/billing");
+			target = client.target("http://billing-service:8080").path("/billing");
 			break;
 
 		default:
