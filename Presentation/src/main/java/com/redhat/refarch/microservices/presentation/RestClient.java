@@ -26,6 +26,7 @@ import org.apache.http.HttpStatus;
 import com.redhat.refarch.microservices.billing.model.Result;
 import com.redhat.refarch.microservices.billing.model.Transaction;
 import com.redhat.refarch.microservices.product.model.Inventory;
+import com.redhat.refarch.microservices.product.model.Keyword;
 import com.redhat.refarch.microservices.product.model.Product;
 import com.redhat.refarch.microservices.sales.model.Customer;
 import com.redhat.refarch.microservices.sales.model.Order;
@@ -71,7 +72,7 @@ public class RestClient {
 		}
 	}
 
-	private static List<Product> getFeaturedProducts() throws HttpErrorException {
+	static List<Product> getFeaturedProducts() throws HttpErrorException {
 		WebTarget webTarget = getWebTarget(Service.Product, "products").queryParam("featured", true);
 		logInfo("Executing " + webTarget.getUri());
 		Response response = webTarget.request(MediaType.APPLICATION_JSON).get();
@@ -467,6 +468,50 @@ public class RestClient {
 			}
 			Collections.sort(orders, reverseOrderNumberComparator);
 			request.setAttribute("orders", orders);
+		}
+	}
+
+	static long addProduct(Product product) throws HttpErrorException {
+		WebTarget webTarget = getWebTarget( Service.Product, "products" );
+		Entity<Product> entity = Entity.entity( product, MediaType.APPLICATION_JSON );
+		logInfo( "Executing " + webTarget.getUri() + " with " + product );
+		Response response = webTarget.request( MediaType.APPLICATION_JSON ).post( entity );
+		if( isError( response ) ) {
+			HttpErrorException exception = new HttpErrorException( response );
+			logInfo( "Failed to add product: " + exception.getMessage() );
+			throw exception;
+		} else {
+			long sku = response.readEntity( Product.class ).getSku();
+			logInfo( "Added product with ID " + sku );
+			return sku;
+		}
+	}
+
+	static void addKeyword(Keyword keyword) throws HttpErrorException {
+		WebTarget webTarget = getWebTarget( Service.Product, "keywords" );
+		Entity<Keyword> entity = Entity.entity( keyword, MediaType.APPLICATION_JSON );
+		logInfo( "Executing " + webTarget.getUri() + " with " + keyword );
+		Response response = webTarget.request( MediaType.APPLICATION_JSON ).post( entity );
+		if( isError( response ) ) {
+			HttpErrorException exception = new HttpErrorException( response );
+			logInfo( "Failed to add keyword: " + exception.getMessage() );
+			throw exception;
+		} else {
+			logInfo( "Added keyword " + keyword );
+		}
+	}
+
+	static void classifyProduct(long sku, List<Keyword> keywords) throws HttpErrorException {
+		WebTarget webTarget = getWebTarget( Service.Product, "classify", String.valueOf( sku ) );
+		Entity<List<Keyword>> entity = Entity.entity(keywords, MediaType.APPLICATION_JSON);
+		logInfo( "Executing " + webTarget.getUri() + " with " + keywords );
+		Response response = webTarget.request( MediaType.APPLICATION_JSON ).post( entity );
+		if( isError( response ) ) {
+			HttpErrorException exception = new HttpErrorException( response );
+			logInfo( "Failed to classify products: " + exception.getMessage() );
+			throw exception;
+		} else {
+			logInfo( "Classified " + sku + " with " + keywords );
 		}
 	}
 

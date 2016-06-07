@@ -25,10 +25,10 @@ public class Product
 	private Long sku;
 	private String name;
 	private String description;
-	private Integer length;
-	private Integer width;
-	private Integer height;
-	private Integer weight;
+	private Double length;
+	private Double width;
+	private Double height;
+	private Double weight;
 	private Boolean featured;
 	private Integer availability;
 	private BigDecimal price;
@@ -68,42 +68,42 @@ public class Product
 		this.description = description;
 	}
 
-	public Integer getLength()
+	public Double getLength()
 	{
 		return length;
 	}
 
-	public void setLength(Integer length)
+	public void setLength(Double length)
 	{
 		this.length = length;
 	}
 
-	public Integer getWidth()
+	public Double getWidth()
 	{
 		return width;
 	}
 
-	public void setWidth(Integer width)
+	public void setWidth(Double width)
 	{
 		this.width = width;
 	}
 
-	public Integer getHeight()
+	public Double getHeight()
 	{
 		return height;
 	}
 
-	public void setHeight(Integer height)
+	public void setHeight(Double height)
 	{
 		this.height = height;
 	}
 
-	public Integer getWeight()
+	public Double getWeight()
 	{
 		return weight;
 	}
 
-	public void setWeight(Integer weight)
+	public void setWeight(Double weight)
 	{
 		this.weight = weight;
 	}

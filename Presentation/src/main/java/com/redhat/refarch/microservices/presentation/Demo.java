@@ -3,7 +3,7 @@ package com.redhat.refarch.microservices.presentation;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.URISyntaxException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -14,61 +14,59 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
+import com.redhat.refarch.microservices.product.model.Keyword;
+import com.redhat.refarch.microservices.product.model.Product;
 
 public class Demo
 {
 
-	public static void populate() throws IOException, JSONException, URISyntaxException, HttpErrorException
+	public static void populate() throws HttpErrorException, IOException
 	{
 		if( RestClient.getFeaturedProducts().isEmpty() )
 		{
 			//Map products to their category as you add them:
-			Map<Long, List<String>> skuKeywords = new HashMap<>();
+			Map<Long, List<Keyword>> skuKeywords = new HashMap<>();
 			for( String[] data : readCSV() )
 			{
-				JSONObject jsonObject = getProduct( data );
-				long sku = RestClient.addProduct( jsonObject );
-				List<String> productKeywords = new ArrayList<>();
+				Product product = getProduct( data );
+				long sku = RestClient.addProduct( product );
+				List<Keyword> productKeywords = new ArrayList<>();
 				skuKeywords.put( sku, productKeywords );
-				String image = jsonObject.getString( "image" );
+				String image = product.getImage();
 				if( "TV".equals( image ) )
 				{
-					productKeywords.add( "Electronics" );
-					productKeywords.add( "TV" );
+					productKeywords.add( getKeyword( "Electronics" ) );
+					productKeywords.add( getKeyword( "TV" ) );
 				}
 				else if( "Microwave".equals( image ) )
 				{
-					productKeywords.add( "Electronics" );
-					productKeywords.add( "Microwave" );
+					productKeywords.add( getKeyword( "Electronics" ) );
+					productKeywords.add( getKeyword( "Microwave" ) );
 				}
 				else if( "Laptop".equals( image ) )
 				{
-					productKeywords.add( "Electronics" );
-					productKeywords.add( "Laptop" );
+					productKeywords.add( getKeyword( "Electronics" ) );
+					productKeywords.add( getKeyword( "Laptop" ) );
 				}
 				else if( "CoffeeTable".equals( image ) )
 				{
-					productKeywords.add( "Furniture" );
-					productKeywords.add( "Table" );
+					productKeywords.add( getKeyword( "Furniture" ) );
+					productKeywords.add( getKeyword( "Table" ) );
 				}
 			}
 			//Get unique keywords:
-			Set<String> keywords = new HashSet<>();
-			for( Entry<Long, List<String>> entry : skuKeywords.entrySet() )
+			Set<Keyword> keywords = new HashSet<>();
+			for( Entry<Long, List<Keyword>> entry : skuKeywords.entrySet() )
 			{
 				keywords.addAll( entry.getValue() );
 			}
 			//Store keywords in database:
-			for( String keyword : keywords )
+			for( Keyword keyword : keywords )
 			{
-				JSONObject jsonObject = new JSONObject();
-				jsonObject.put( "keyword", keyword );
-				RestClient.addKeyword( jsonObject );
+				RestClient.addKeyword( keyword );
 			}
 			//Classify products:
-			for( Entry<Long, List<String>> entry : skuKeywords.entrySet() )
+			for( Entry<Long, List<Keyword>> entry : skuKeywords.entrySet() )
 			{
 				RestClient.classifyProduct( entry.getKey(), entry.getValue() );
 			}
@@ -79,20 +77,26 @@ public class Demo
 		}
 	}
 
-	private static JSONObject getProduct(String[] data) throws JSONException
+	private static Keyword getKeyword(String word) {
+		Keyword keyword = new Keyword();
+		keyword.setKeyword( word );
+		return keyword;
+	}
+
+	private static Product getProduct(String[] data)
 	{
-		JSONObject jsonObject = new JSONObject();
-		jsonObject.put( "description", data[0] );
-		jsonObject.put( "height", Double.parseDouble( data[1] ) );
-		jsonObject.put( "length", Double.parseDouble( data[2] ) );
-		jsonObject.put( "name", data[3] );
-		jsonObject.put( "weight", Double.parseDouble( data[4] ) );
-		jsonObject.put( "width", Double.parseDouble( data[5] ) );
-		jsonObject.put( "featured", Boolean.parseBoolean( data[6] ) );
-		jsonObject.put( "availability", Integer.parseInt( data[7] ) );
-		jsonObject.put( "image", data[8] );
-		jsonObject.put( "price", Double.parseDouble( data[9] ) );
-		return jsonObject;
+		Product product = new Product();
+		product.setDescription( data[0] );
+		product.setHeight( Double.parseDouble( data[1] ) );
+		product.setLength( Double.parseDouble( data[2] ) );
+		product.setName( data[3] );
+		product.setWeight( Double.parseDouble( data[4] ) );
+		product.setWidth( Double.parseDouble( data[5] ) );
+		product.setFeatured( Boolean.parseBoolean( data[6] ) );
+		product.setAvailability( Integer.parseInt( data[7] ) );
+		product.setImage( data[8] );
+		product.setPrice( BigDecimal.valueOf( Double.parseDouble( data[9] ) ) );
+		return product;
 	}
 
 	private static List<String[]> readCSV() throws IOException
