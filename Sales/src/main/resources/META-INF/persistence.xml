@@ -7,8 +7,9 @@
 	<persistence-unit name="primary">
 		<jta-data-source>java:jboss/datasources/SalesDS</jta-data-source>
 		<properties>
-			<!-- <property name="hibernate.hbm2ddl.auto" value="create-drop" /> <property 
-				name="hibernate.show_sql" value="true" /> -->
+			<!-- Properties for Hibernate -->
+			<property name="hibernate.hbm2ddl.auto" value="update" />
+			<property name="hibernate.show_sql" value="true" />
 			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />
 		</properties>
 	</persistence-unit>
