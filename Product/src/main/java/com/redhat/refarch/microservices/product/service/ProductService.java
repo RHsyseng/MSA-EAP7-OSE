@@ -72,7 +72,7 @@ public class ProductService
 
 	@GET
 	@Path("/products")
-	@Produces({"application/json", "application/xml"})
+	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	public Collection<Product> getProducts(@Context UriInfo uriInfo)
 	{
 		try
@@ -120,7 +120,7 @@ public class ProductService
 
 	@GET
 	@Path("/products/{sku}")
-	@Produces({"application/json", "application/xml"})
+	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	public Product getProduct(@PathParam("sku") Long sku)
 	{
 		try
@@ -141,8 +141,8 @@ public class ProductService
 
 	@PUT
 	@Path("/products/{sku}")
-	@Consumes({"application/json", "application/xml"})
-	@Produces({"application/json", "application/xml"})
+	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	public Product updateProduct(@PathParam("sku") Long sku, Product product)
 	{
 		Product entity = getProduct( sku );
@@ -162,8 +162,8 @@ public class ProductService
 
 	@PATCH
 	@Path("/products/{sku}")
-	@Consumes({"application/json", "application/xml"})
-	@Produces({"application/json", "application/xml"})
+	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	public Product partiallyUpdateProduct(@PathParam("sku") Long sku, Product product)
 	{
 		Product entity = getProduct( sku );
@@ -183,8 +183,8 @@ public class ProductService
 
 	@DELETE
 	@Path("/products/{sku}")
-	@Consumes({"application/json", "application/xml"})
-	@Produces({"application/json", "application/xml"})
+	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	public void deleteProduct(@PathParam("sku") Long sku)
 	{
 		Product product = getProduct( sku );
@@ -219,8 +219,8 @@ public class ProductService
 
 	@POST
 	@Path("/classify/{sku}")
-	@Consumes({"application/json", "application/xml"})
-	@Produces({"application/json", "application/xml"})
+	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	public void classifyProduct(@PathParam("sku") Long sku, List<Keyword> keywords)
 	{
 		Product product = getProduct( sku );
@@ -238,8 +238,8 @@ public class ProductService
 
 	@POST
 	@Path("/reduce/")
-	@Consumes({"application/json", "application/xml"})
-	@Produces({"application/json", "application/xml"})
+	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	public void reduceInventory(Inventory[] inventoryAdjustment)
 	{
 		try

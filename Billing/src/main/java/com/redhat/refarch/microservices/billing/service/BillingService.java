@@ -17,6 +17,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.container.Suspended;
+import javax.ws.rs.core.MediaType;
 
 import com.redhat.refarch.microservices.billing.model.Result;
 import com.redhat.refarch.microservices.billing.model.Result.Status;
@@ -33,25 +34,22 @@ public class BillingService {
 
 	@POST
 	@Path("/process")
-	@Consumes({"application/json", "application/xml"})
-	@Produces({"application/json", "application/xml"})
+	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	public void process(final Transaction transaction, final @Suspended AsyncResponse asyncResponse) {
 
-		getExecutorService().execute( new Runnable() {
-
-			@Override
-			public void run() {
-				try {
-					final long sleep = 5000;
-					logInfo( "Will simulate credit card processing for " + sleep + " milliseconds" );
-					Thread.sleep( sleep );
-					Result result = processSync( transaction );
-					asyncResponse.resume( result );
-				} catch (Exception e) {
-					asyncResponse.resume( e );
-				}
+		Runnable runnable = () -> {
+			try {
+				final long sleep = 5000;
+				logInfo( "Will simulate credit card processing for " + sleep + " milliseconds" );
+				Thread.sleep( sleep );
+				Result result = processSync( transaction );
+				asyncResponse.resume( result );
+			} catch (Exception e) {
+				asyncResponse.resume( e );
 			}
-		} );
+		};
+		getExecutorService().execute( runnable );
 	}
 
 	private Executor getExecutorService() {
@@ -87,7 +85,7 @@ public class BillingService {
 	@POST
 	@Path("/refund/{transactionNumber}")
 	@Consumes({"*/*"})
-	@Produces({"application/json", "application/xml"})
+	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	public void refund(@PathParam("transactionNumber") long transactionNumber) {
 		logInfo( "Asked to refund credit card transaction: " + transactionNumber );
 	}

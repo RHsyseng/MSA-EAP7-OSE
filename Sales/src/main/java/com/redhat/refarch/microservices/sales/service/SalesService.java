@@ -26,6 +26,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.MediaType;
 
 import com.redhat.refarch.microservices.sales.model.Customer;
 import com.redhat.refarch.microservices.sales.model.Error;
@@ -47,8 +48,8 @@ public class SalesService
 
 	@POST
 	@Path("/customers")
-	@Consumes({"application/json", "application/xml"})
-	@Produces({"application/json", "application/xml"})
+	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	public Customer addCustomer(Customer customer)
 	{
 		try
@@ -64,7 +65,7 @@ public class SalesService
 
 	@GET
 	@Path("/customers")
-	@Produces({"application/json", "application/xml"})
+	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	public Customer getCustomer(@QueryParam("username") String username)
 	{
 		try
@@ -86,7 +87,7 @@ public class SalesService
 
 	@GET
 	@Path("/customers/{id}")
-	@Produces({"application/json", "application/xml"})
+	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	public Customer getCustomer(@PathParam("id") Long id)
 	{
 		try
@@ -112,8 +113,8 @@ public class SalesService
 
 	@PUT
 	@Path("/customers/{id}")
-	@Consumes({"application/json", "application/xml"})
-	@Produces({"application/json", "application/xml"})
+	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	public Customer updateCustomer(@PathParam("id") Long id, Customer customer)
 	{
 		Customer entity = getCustomer( id );
@@ -133,8 +134,8 @@ public class SalesService
 
 	@PATCH
 	@Path("/customers/{id}")
-	@Consumes({"application/json", "application/xml"})
-	@Produces({"application/json", "application/xml"})
+	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	public Customer partiallyUpdateCustomer(@PathParam("id") Long id, Customer customer)
 	{
 		Customer entity = getCustomer( id );
@@ -154,8 +155,8 @@ public class SalesService
 
 	@DELETE
 	@Path("/customers/{id}")
-	@Consumes({"application/json", "application/xml"})
-	@Produces({"application/json", "application/xml"})
+	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	public void deleteCustomer(@PathParam("id") Long id)
 	{
 		Customer entity = getCustomer( id );
@@ -171,8 +172,8 @@ public class SalesService
 
 	@POST
 	@Path("/customers/{customerId}/orders")
-	@Consumes({"application/json", "application/xml"})
-	@Produces({"application/json", "application/xml"})
+	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	public Order addOrder(@PathParam("customerId") Long customerId, Order order)
 	{
 		Customer customer = getCustomer( customerId );
@@ -190,7 +191,7 @@ public class SalesService
 
 	@GET
 	@Path("/customers/{customerId}/orders")
-	@Produces({"application/json", "application/xml"})
+	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	public List<Order> getOrders(@PathParam("customerId") Long customerId, @QueryParam("status") Status status)
 	{
 		logInfo( "getOrders(" + customerId + ", " + status + ")" );
@@ -220,7 +221,7 @@ public class SalesService
 
 	@GET
 	@Path("/customers/{customerId}/orders/{orderId}")
-	@Produces({"application/json", "application/xml"})
+	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	public Order getOrder(@PathParam("customerId") Long customerId, @PathParam("orderId") Long orderId)
 	{
 		try
@@ -248,8 +249,8 @@ public class SalesService
 
 	@PUT
 	@Path("/customers/{customerId}/orders/{orderId}")
-	@Consumes({"application/json", "application/xml"})
-	@Produces({"application/json", "application/xml"})
+	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	public Order updateOrder(@PathParam("customerId") Long customerId, @PathParam("orderId") Long orderId, Order order)
 	{
 		Order entity = getOrder( customerId, orderId );
@@ -269,8 +270,8 @@ public class SalesService
 
 	@PATCH
 	@Path("/customers/{customerId}/orders/{orderId}")
-	@Consumes({"application/json", "application/xml"})
-	@Produces({"application/json", "application/xml"})
+	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	public Order partiallyUpdateOrder(@PathParam("customerId") Long customerId, @PathParam("orderId") Long orderId, Order order)
 	{
 		Order entity = getOrder( customerId, orderId );
@@ -305,8 +306,8 @@ public class SalesService
 
 	@POST
 	@Path("/customers/{customerId}/orders/{orderId}/orderItems")
-	@Consumes({"application/json", "application/xml"})
-	@Produces({"application/json", "application/xml"})
+	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	public OrderItem addOrderItem(@PathParam("customerId") Long customerId, @PathParam("orderId") Long orderId, OrderItem orderItem)
 	{
 		Order order = getOrder( customerId, orderId );
@@ -324,7 +325,7 @@ public class SalesService
 
 	@GET
 	@Path("/customers/{customerId}/orders/{orderId}/orderItems")
-	@Produces({"application/json", "application/xml"})
+	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	public List<OrderItem> getOrderItems(@PathParam("customerId") Long customerId, @PathParam("orderId") Long orderId)
 	{
 		Order order = getOrder( customerId, orderId );
@@ -344,7 +345,7 @@ public class SalesService
 
 	@GET
 	@Path("/customers/{customerId}/orders/{orderId}/orderItems/{orderItemId}")
-	@Produces({"application/json", "application/xml"})
+	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	public OrderItem getOrderItem(@PathParam("customerId") Long customerId, @PathParam("orderId") Long orderId,
 			@PathParam("orderItemId") Long orderItemId)
 	{
@@ -373,8 +374,8 @@ public class SalesService
 
 	@PUT
 	@Path("/customers/{customerId}/orders/{orderId}/orderItems/{orderItemId}")
-	@Consumes({"application/json", "application/xml"})
-	@Produces({"application/json", "application/xml"})
+	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	public OrderItem updateOrderItem(@PathParam("customerId") Long customerId, @PathParam("orderId") Long orderId,
 			@PathParam("orderItemId") Long orderItemId, OrderItem orderItem)
 	{
@@ -395,8 +396,8 @@ public class SalesService
 
 	@PATCH
 	@Path("/customers/{customerId}/orders/{orderId}/orderItems/{orderItemId}")
-	@Consumes({"application/json", "application/xml"})
-	@Produces({"application/json", "application/xml"})
+	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	public OrderItem partiallyUpdateOrderItem(@PathParam("customerId") Long customerId, @PathParam("orderId") Long orderId,
 			@PathParam("orderItemId") Long orderItemId, OrderItem orderItem)
 	{
@@ -436,8 +437,8 @@ public class SalesService
 
 	@POST
 	@Path("/authenticate")
-	@Consumes({"application/json", "application/xml"})
-	@Produces({"application/json", "application/xml"})
+	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	public Customer authenticate(Customer customer)
 	{
 		logInfo( "Asked to authenticate " + customer );
